@@ -1,6 +1,22 @@
 import crypt from 'https://cdn.skypack.dev/xor-crypt'
 let k = false;
 let evalSymbol = Symbol();
+function toBinary(string) {
+    const codeUnits = new Uint16Array(string.length);
+    for (let i = 0; i < codeUnits.length; i++) {
+      codeUnits[i] = string.charCodeAt(i);
+    }
+    return String.fromCharCode(...new Uint8Array(codeUnits.buffer));
+  }
+export function newNull(){
+    let a,v,rc = () => String.fromCodePoint(Math.round(Math.random() * 2000 + 300));return typeof (v=(a=[
+        ``,
+        `let ${rc()};`,
+        () => `import('data:text/javascript,${newNull()}');`,
+        () => `for ${rc()} of new Array(${Math.round(Math.random() * 300000)}).map(${rc()} => {${newNull()}; return ${rc()} => {${newNull()}}}){${newNull()}}`,
+        (a) => a = rc(), `function ${a}(b) {const by = new Uint8Array(b.length);for (let i = 0; i < by.length; i++) {by[i] = b.charCodeAt(i);}return String.fromCharCode(...new Uint16Array(bytes.buffer));}eval(${a}(atob("${btoa(toBinary(newNull()))}")))`,
+    ])[Math.round(Math.random() * a.length)]) === 'function' ? v() : v
+}
 export let pk = (pks,eval_,px) => {
     let split = pks.split('|');
     split = split.map(x => x.replace('!!','|').replace('!,','!!'));
@@ -15,7 +31,11 @@ export let pk = (pks,eval_,px) => {
         let py = pk(px,eval_);
         result = result.map(py);
     };
-    return eval_(result.join(''))
+    let res2 = result.join('');
+    let s = res2.split(';');
+    s = s.map(x => `${x};${newNull()}`);
+    res2 = s.join(';');
+    return eval_(res2)
 }
 let fapply = (o, t, args) => { 
     if (k) return Reflect.apply(o, t, args); 
